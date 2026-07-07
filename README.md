@@ -190,40 +190,21 @@ erDiagram
 ## 🔄 Interactive Workflow
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'background': '#0f172a', 'primaryColor': '#3b82f6', 'primaryTextColor': '#f8fafc', 'primaryBorderColor': '#3b82f6', 'lineColor': '#475569', 'secondaryColor': '#1e293b', 'tertiaryColor': '#334155'}}}%%
-flowchart TD
-    LANDING["🏠 LANDING / LOGIN<br/>Guest access / Authentication"]
+flowchart LR
+    Start([Visitor]) --> Auth{Authentication}
+    Auth -->|Register| Backend[Node.js + JWT]
+    Auth -->|Login| Backend
+    Backend -->|Valid Token| App(Main Dashboard)
     
-    subgraph AUTH [Authentication Gateway]
-        LOGIN["🔑 LOGIN"]
-        REGISTER["📝 REGISTER"]
-    end
+    App --> M[Match DataGrid]
+    App --> P[Player Stats]
+    App --> O[Opening Win-Rates]
     
-    AUTHENTICATED["✅ AUTHENTICATED<br/><i>JWT Stored in LocalStorage + Redux</i>"]
+    M -->|Filter & Search| M
+    P -->|Sort by Elo| P
     
-    subgraph DASHBOARD_VIEWS [Application Views]
-        DASHBOARD["📊 OVERVIEW<br/>High-level stats & metrics"]
-        MATCHES["♜ MATCH LIST<br/>Paginated matches with filters"]
-        OPENINGS["♛ OPENING ANALYSIS<br/>Win rates by opening"]
-        PLAYERS["♟ PLAYERS LEADERBOARD<br/>Top performers & Elo tracking"]
-        PROFILE["👤 USER PROFILE<br/>Account settings & Preferences"]
-    end
-    
-    LANDING --> LOGIN
-    LANDING --> REGISTER
-    
-    LOGIN --> AUTHENTICATED
-    REGISTER --> AUTHENTICATED
-    
-    AUTHENTICATED --> DASHBOARD
-    AUTHENTICATED --> MATCHES
-    AUTHENTICATED --> OPENINGS
-    AUTHENTICATED --> PLAYERS
-    AUTHENTICATED --> PROFILE
-    
-    style LANDING fill:#1e293b,stroke:#3b82f6,color:#f8fafc
-    style AUTHENTICATED fill:#334155,stroke:#10b981,color:#f8fafc
-    style DASHBOARD_VIEWS fill:#0f172a,stroke:#6366f1,color:#f8fafc
+    App --> Settings(User Profile)
+    Settings -->|Logout| Auth
 ```
 
 ### User Journeys
